@@ -1,0 +1,52 @@
+# Standalone nvim-sandbox editor (no project-specific volumes).
+#
+#   docker compose build
+#   docker compose up -d
+#   docker compose exec -u dev editor tmux new -A -s dev
+#
+# Consumers (e.g. KCWorks) typically use only the image tag and supply their
+# own compose overlays for network/volumes/agents. See README.md.
+name: nvim-sandbox
+services:
+  editor:
+    image: ${NVIM_SANDBOX_IMAGE:-nvim-sandbox:latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NVIM_VERSION: ${NVIM_VERSION:-v0.12.5}
+    container_name: nvim-sandbox
+    environment:
+      HOME: /home/dev
+      EDITOR: nvim
+      VISUAL: nvim
+      SHELL: /bin/zsh
+      TERM: ${TERM:-xterm-256color}
+      PNPM_HOME: /home/dev/.local/share/pnpm
+      YARN_ENABLE_SCRIPTS: "false"
+      GO_VERSION: ${GO_VERSION:-1.24.7}
+      GH_VERSION: ${GH_VERSION:-2.101.0}
+      LAZYGIT_VERSION: ${LAZYGIT_VERSION:-0.64.1}
+      YAZI_VERSION: ${YAZI_VERSION:-26.9.1}
+      LMS_HOST: ${LMS_HOST:-host.docker.internal}
+      LMS_PORT: ${LMS_PORT:-1234}
+      EDITOR_CONFIG_PULL: ${EDITOR_CONFIG_PULL:-0}
+      EDITOR_TOOLS_UPDATE: ${EDITOR_TOOLS_UPDATE:-0}
+      EDITOR_MANIFEST: ${EDITOR_MANIFEST:-}
+      EDITOR_ADDON_REPO: ${EDITOR_ADDON_REPO:-}
+      EDITOR_ADDON_DIR: ${EDITOR_ADDON_DIR:-}
+      EDITOR_ADDON_SCRIPT: ${EDITOR_ADDON_SCRIPT:-}
+      EDITOR_ADDON_REF: ${EDITOR_ADDON_REF:-}
+    volumes:
+      - type: volume
+        source: editor_home
+        target: /home/dev
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    command: ["sleep", "infinity"]
+volumes:
+  editor_home:
+    name: ${NVIM_SANDBOX_HOME_VOLUME:-nvim-sandbox-home}

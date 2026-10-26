@@ -1,0 +1,31 @@
+{
+  "pull_on_start": false,
+  "addon": {
+    "enabled": false,
+    "repo": "",
+    "path": "~/.local/share/nvim-sandbox/addon",
+    "script": "seed-addon.sh",
+    "depth": 0,
+    "ref": ""
+  },
+  "configs": {
+    "nvim": {
+      "enabled": true,
+      "repo": "https://github.com/monotasker/nvconfig.git",
+      "path": "~/.config/nvim/lua",
+      "depth": 1
+    },
+    "tmux": {
+      "enabled": true,
+      "repo": "https://github.com/monotasker/tmux-config.git",
+      "path": "~/.config/tmux",
+      "depth": 1
+    },
+    "zsh": {
+      "enabled": true,
+      "repo": "https://github.com/monotasker/zsh-config.git",
+      "path": "~/.config/zsh",
+      "depth": 1
+    }
+  }
+}
